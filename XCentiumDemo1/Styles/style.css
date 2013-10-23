@@ -42,7 +42,7 @@ p {
 }
 
 ul, ol {
-    margin-left 0;
+    margin-left: 0;
 }
 
 ul ul {
@@ -98,4 +98,16 @@ td pre {
     font: 85% monospace;
     padding: 5px;
     margin: 5px 0;
+}
+
+
+.field-validation-error
+{
+    color: Red;
+}
+
+.validation-summary-errors
+{
+    font-weight: bold;
+    color: Black;
 }
