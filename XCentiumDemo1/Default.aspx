@@ -62,20 +62,25 @@
 
         </script>
     </head>
-    <%--http://sorgalla.com/projects/jcarousel/--%>
-    <%--http://sorgalla.com/projects/jcarousel/examples/dynamic_javascript.html--%>
     <body>
         <div id="wrap">
-            <h2>
-                Welcome to Ming's demo to XCentium 
-            </h2>
-            <h3>Enter a valid URL, and I will show you all the images from that URL in a jQuery Carousel, and also show you some info about the page.</h3>
+            <p>Enter a valid URL, and I will show you all the images from that URL in a Carousel, and also show you some info about the page.</p>
             <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
   
-
-            <ul id="mycarousel" class="jcarousel-skin-ie7">
-                <!-- The content will be dynamically loaded in here -->
-            </ul>
+            Enter your URL here : <asp:TextBox ID="tbURL" Width="400px" runat="server" />
+            <asp:Button ID="btnSubmit" Text="Submit" runat="server" OnClick="OnClick_Submit" />
+            <hr />
+            <asp:Panel ID="pnlResults" runat="server" Visible="false">
+                <asp:Literal ID="litPhotoInfo" runat="server" />
+                <ul id="mycarousel" class="jcarousel-skin-ie7">
+                    <!-- The content will be dynamically loaded in here -->
+                </ul>
+                <br />
+                <br />
+                <h2>Some interesting stats about this page</h2>
+                <asp:Literal ID="litTextInfo" runat="server" />           
+            </asp:Panel>
+            
         </div>
     </body>
     </html>

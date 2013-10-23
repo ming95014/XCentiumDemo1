@@ -13,5 +13,10 @@ namespace XCentiumDemo1
         {
 
         }
+
+        protected void OnClick_Submit(object sender, EventArgs e)
+        {
+            pnlResults.Visible = true;
+        }       
     }
 }
