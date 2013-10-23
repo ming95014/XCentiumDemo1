@@ -27,5 +27,21 @@
         <li>C#</li>
         <li>jQuery Carousel : http://sorgalla.com/projects/jcarousel/examples/dynamic_javascript.html </li>
         <li>Repository : Github : https://github.com/ming95014/XCentiumDemo1 </li>
+        <li>Firebug</li>
+    </ul>
+
+    <h2>Coding Technique demonstrated</h2>
+    <ul>
+        <li></li>
+    </ul>
+
+    <h2>Release notes</h2>
+    <ul>
+        <li>Some sites such as flickr.com has funny</li>
+    </ul>
+
+    <h2>Release History</h2>
+    <ul>
+        <li>V0.1  Ming  10/23/2013</li>
     </ul>
 </asp:Content>
