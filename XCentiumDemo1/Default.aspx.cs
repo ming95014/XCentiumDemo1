@@ -15,40 +15,38 @@ namespace XCentiumDemo1
     {
         protected string strPhotos = string.Empty;
 
-        protected void Page_Load(object sender, EventArgs e)
-        {
-
-        }
-
         protected void OnClick_Submit(object sender, EventArgs e)
         {
             // 1. read the source of the URL
+            LoadImagesIntoCarousel(tbURL.Text);
 
-            // 2. find the images
+            // 2. count the words
 
-            // 3. count the words
-
-            StringBuilder sb = new StringBuilder();
-            sb.Append(@"{ url: ""http://static.flickr.com/66/199481236_dc98b5abb3_s.jpg"", title: ""Flower1"" },");
-            sb.Append(@"{ url: ""http://static.flickr.com/75/199481072_b4a0d09597_s.jpg"", title: ""Flower2"" },");
-            sb.Append(@"{ url: ""http://static.flickr.com/57/199481087_33ae73a8de_s.jpg"", title: ""Flower3"" },");
-            sb.Append(@"{ url: ""http://farm8.staticflickr.com/7425/10421900155_7a2de128f3_z.jpg"", title: ""People"" }");
-            strPhotos = sb.ToString();
             pnlResults.Visible = true;
         }
 
-        private void GetLinks()
+        private void LoadImagesIntoCarousel(string strURL)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://www.example.com");
+            // 1. get each image links from the URL
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(strURL);
             request.Credentials = System.Net.CredentialCache.DefaultCredentials;
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            List<Uri> links = null;
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 using( StreamReader sr = new StreamReader( response.GetResponseStream()))
                 {
-                    List<Uri> links = FetchLinksFromSource( sr.ReadToEnd() );
+                    links = FetchLinksFromSource( sr.ReadToEnd() );
                 }
             }
+            // 2. Load the strPhotos
+            StringBuilder sb = new StringBuilder();
+            foreach (Uri link in links)
+            {
+                if (link.AbsoluteUri.ToLower().Contains(".jpg"))
+                sb.Append(@"{ url: '" + link.AbsoluteUri + "', title: 'img' },");
+            }
+            strPhotos = sb.ToString();
         }
 
         private List<Uri> FetchLinksFromSource(string htmlSource)

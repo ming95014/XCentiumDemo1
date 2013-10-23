@@ -41,7 +41,6 @@
                     size: mycarousel_itemList.length,
                     scroll: 1,
                     wrap: "circular",
-                    width: 50,
                     itemFallbackDimension: mycarousel_itemList.length,
                     itemLoadCallback: { onBeforeAnimation: mycarousel_itemLoadCallback }
                 });
@@ -56,11 +55,11 @@
   
             Enter your URL here : <asp:TextBox ID="tbURL" Width="500px" runat="server" />    
             <asp:Button ID="btnSubmit" Text="Submit" runat="server" OnClick="OnClick_Submit" ValidationGroup="vg1" />
-            <asp:RequiredFieldValidator runat="server" ControlToValidate="tbURL" ValidationGroup="vg1" CssClass="field-validation-error" 
+            <%--<asp:RequiredFieldValidator runat="server" ControlToValidate="tbURL" ValidationGroup="vg1" CssClass="field-validation-error" 
                                             ErrorMessage="Please enter a URL" Display="Dynamic" />
             <asp:RegularExpressionValidator runat="Server" ControlToValidate="tbURL" ValidationGroup="vg1" CssClass="field-validation-error"
                                             ValidationExpression="(http|https)://([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?" 
-                                            ErrorMessage="Please enter a valid URL" Display="Dynamic"/>
+                                            ErrorMessage="Please enter a valid URL" Display="Dynamic"/>--%>
             <hr />
             <asp:Panel ID="pnlResults" runat="server" Visible="false">
                 <h3>Here are the images that I found on this page</h3>
