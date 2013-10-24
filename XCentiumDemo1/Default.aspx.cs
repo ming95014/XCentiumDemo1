@@ -70,8 +70,8 @@ namespace XCentiumDemo1
         {
             List<Uri> links = new List<Uri>();
             try
-            {              
-                string regexImgSrc = @"<img[^>]*?src\s*=\s*[""']?([^'"" >]+?)[ '""][^>]*?>";  // is this too strict and missing some images?
+            {
+                string regexImgSrc = @"<img.+?src=""(.+?)"".+?/?>";
                 MatchCollection matchesImgSrc = Regex.Matches(htmlSource, regexImgSrc, RegexOptions.IgnoreCase | RegexOptions.Singleline);
                 foreach (Match m in matchesImgSrc)
                 {
@@ -93,19 +93,18 @@ namespace XCentiumDemo1
         // Get the Text information from the scrapped html
         private string GetTextInfo(string strHTML)
         {
-            if (strHTML.IndexOf("<body>") > 0)
-                strHTML = strHTML.Substring(strHTML.IndexOf("<body>"));
-            else if (strHTML.IndexOf("<body") > 0)
-                strHTML = strHTML.Substring(strHTML.IndexOf("<body"));
+            // 1. Get the <body> of HTML
+            if (chkBodyOnly.Checked)
+                strHTML = GetBodyofHTML(strHTML);
 
-            // 1. let's get rid of all the words from the html tags--pretty sure that's not what we want to count them
-            strHTML = Regex.Replace(strHTML, @"<(.|\n)*?>", string.Empty);
+            // 2. let's get rid of all the words from the html tags--pretty sure that's not what we want to count them
+            strHTML = Regex.Replace(strHTML, @"<(.|\n)*?>", string.Empty).Replace("&nbsp;", "");
 
-            // 2. next, let's get rid of all the non-alpha numberics, such as [, . { ....etc.
+            // 3. next, let's get rid of all the non-alpha numberics, such as [, . { ....etc.
             Regex rgx = new Regex("[^a-zA-Z0-9 -]");
             strHTML = rgx.Replace(strHTML, ""); //.Replace("  ","");
 
-            // 3. Split them
+            // 4. Split them
             int iWordCnt = 0;
             Hashtable hWords = new Hashtable();
             string[] arr = strHTML.Split(' ');
@@ -113,12 +112,12 @@ namespace XCentiumDemo1
             foreach (string w in arr)
             {
                 var word = w.Trim();
-                // 4. Also get rid of really short and really long words--just taking the liberty that we don't want them...Ming
+                // 5. Also get rid of really short and really long words--just taking the liberty that we don't want them...Ming
                 if (word.Length > 3 && word.Length < 14 && !word.Contains("-") && !word.ToCharArray().Any(char.IsNumber))
                 {
                     sbAppendLI(ref sb, word);
                     iWordCnt++;
-                    // 5. Store into hashtable if not already in, if already in, increment it.
+                    // 6. Store into hashtable if not already in, if already in, increment it.
                     if (!hWords.Contains(word))
                         hWords.Add(word, 1);
                     else  // otherwise, we increment the count
@@ -132,6 +131,21 @@ namespace XCentiumDemo1
                    //"<ol>" + sb.ToString() + "</ol>";
         }
 
+        private string GetBodyofHTML(string strHTML)
+        {
+            int iStartBody = 0;
+            int iEndBody = -1;
+            strHTML = strHTML.ToLower();
+            if (strHTML.IndexOf("<body>") > 0)
+                iStartBody = strHTML.IndexOf("<body>");
+            else if (strHTML.IndexOf("<body ") > 0)
+                iStartBody = strHTML.IndexOf("<body ");
+
+            if (strHTML.IndexOf("</body>") > 0)
+                iEndBody = strHTML.IndexOf("</body>");
+
+            return (iEndBody == -1) ? strHTML.Substring(iStartBody) : strHTML.Substring(iStartBody, iEndBody - iStartBody + 7);
+        }
         // This is done by inserting the Hash table into SortedList, and then reverse it to get the top 10
         private string GetTop10Words(Hashtable hWords)
         {
@@ -157,7 +171,8 @@ namespace XCentiumDemo1
             {
                 if (w.Count > 1)
                 {
-                    sb.Append("<tr><td><b>" + (++iCnt).ToString() + "</b></td><td><b>" + w.Word + "</b></td><td><b>" + w.Count + "</b></td></tr>");
+                    sb.Append("<tr><td><b>" + (++iCnt).ToString() + "</b></td><td><b>" + w.Word + "</b></td>" +
+                                  "<td><b>" + w.Count + "</b></td></tr>");
                     //sbAppendLI(ref sb, "<b>" + w.Word + "</b> occured " + w.Count + " times");
                     if (iCnt >= 10)
                         break;

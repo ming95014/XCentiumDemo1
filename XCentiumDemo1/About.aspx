@@ -32,12 +32,21 @@
 
     <h2>Coding Technique demonstrated</h2>
     <ul>
-        <li></li>
+        <li>HttpWebRequest, HttpWebResponse</li>
+        <li>Hashtable</li>
+        <li>List&lt;T&gt;</li>
+        <li>Regex</li>
+        <li>jQuery</li>
+        <li>delegate</li>
     </ul>
 
     <h2>Release notes</h2>
     <ul>
         <li>By default only show JPEG since there're many small filler png/gif.</li>
+        <li>When JPEG-only is not checked, there're many tiny png/gif.</li>
+        <li>HTML tags are not part of 'words' counted.</li>
+        <li>When BODY-only is not checked, much more 'words' could be found.</li>
+        <li>images and text from iframe or Sprints are not pulled.</li>
     </ul>
 
     <h2>Release History</h2>
