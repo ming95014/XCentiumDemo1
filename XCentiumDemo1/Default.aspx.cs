@@ -93,8 +93,11 @@ namespace XCentiumDemo1
         // Get the Text information from the scrapped html
         private string GetTextInfo(string strHTML)
         {
-            int iWordCnt = 0;
-            Hashtable hWords = new Hashtable();
+            if (strHTML.IndexOf("<body>") > 0)
+                strHTML = strHTML.Substring(strHTML.IndexOf("<body>"));
+            else if (strHTML.IndexOf("<body") > 0)
+                strHTML = strHTML.Substring(strHTML.IndexOf("<body"));
+
             // 1. let's get rid of all the words from the html tags--pretty sure that's not what we want to count them
             strHTML = Regex.Replace(strHTML, @"<(.|\n)*?>", string.Empty);
 
@@ -103,6 +106,8 @@ namespace XCentiumDemo1
             strHTML = rgx.Replace(strHTML, ""); //.Replace("  ","");
 
             // 3. Split them
+            int iWordCnt = 0;
+            Hashtable hWords = new Hashtable();
             string[] arr = strHTML.Split(' ');
             StringBuilder sb = new StringBuilder();
             foreach (string w in arr)
