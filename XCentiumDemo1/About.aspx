@@ -20,7 +20,7 @@
     <h2>Author</h2>
     <p>Ming Chien (mingch@yahoo.com, (408-252-1933) Cupertino, CA.</p>
 
-    <h2>Resources/Credits</h2>
+    <h2>Tools/Resources/Credits</h2>
     <ul>
         <li>Build on Visual Studio 2010</li>
         <li>ASP.NET Framework 4.0</li>
@@ -37,7 +37,7 @@
 
     <h2>Release notes</h2>
     <ul>
-        <li>Some sites such as flickr.com has funny</li>
+        <li>Some sites such as flickr.com has funny image links</li>
     </ul>
 
     <h2>Release History</h2>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
@@ -54,7 +55,7 @@ namespace XCentiumDemo1
             StringBuilder sb = new StringBuilder();
             foreach (Uri link in links)
             {
-                if (link.AbsoluteUri.ToLower().Contains(".jpg"))
+                //if (link.AbsoluteUri.ToLower().Contains(".jpg"))
                 {
                     sb.Append(@"{ url: '" + link.AbsoluteUri + "', title: 'img' },");
                     cnt++;
@@ -92,27 +93,96 @@ namespace XCentiumDemo1
         private string GetTextInfo(string strHTML)
         {
             int iWordCnt = 0;
+            Hashtable hWords = new Hashtable();
             // 1. let's get rid of all the words from the html tags--pretty sure that's not what we want to count them
             strHTML = Regex.Replace(strHTML, @"<(.|\n)*?>", string.Empty);
+
             // 2. next, let's get rid of all the non-alpha numberics, such as [, . { ....etc.
             Regex rgx = new Regex("[^a-zA-Z0-9 -]");
             strHTML = rgx.Replace(strHTML, ""); //.Replace("  ","");
+
             // 3. Split them
             string[] arr = strHTML.Split(' ');
             StringBuilder sb = new StringBuilder();
-            foreach (string word in arr)
+            foreach (string w in arr)
             {
-                var w = word.Trim();
-                // Also get rid of really short and really long words--just taking the liberty that we don't want them...Ming
-                if (w.Length > 3 && w.Length < 14 && !w.Contains("-") && !w.ToCharArray().Any(char.IsNumber))
+                var word = w.Trim();
+                // 4. Also get rid of really short and really long words--just taking the liberty that we don't want them...Ming
+                if (word.Length > 3 && word.Length < 14 && !word.Contains("-") && !word.ToCharArray().Any(char.IsNumber))
                 {
-                    sb.Append("<li>" + w + "</li>");
+                    sbAppendLI(ref sb, word);
                     iWordCnt++;
+                    // 5. Store into hashtable if not already in, if already in, increment it.
+                    if (!hWords.Contains(word))
+                        hWords.Add(word, 1);
+                    else// otherwise, we increment the count
+                        hWords[word] = (int)hWords[word] + 1;
                 }
             }
 
-            return "Found " + iWordCnt.ToString() + " words. <ol>" + sb.ToString() + "</ol>";
+            //return GetPersonByAge();
+
+            return "Found " + iWordCnt.ToString() + " words.<br/>" +
+                   "The top 10 most frequent words are :" + GetTop10Words(hWords); // + 
+                   //"And here are all the words that I found:" +
+                   //"<ol>" + sb.ToString() + "</ol>";
         }
+
+        // This is done by inserting the Hash table into SortedList, and then reverse it to get the top 10
+        private string GetTop10Words(Hashtable hWords)
+        {
+
+            List<WordAndCnt> list = new List<WordAndCnt>();
+            List<WordAndCnt> listSorted = new List<WordAndCnt>();
+            StringBuilder sb2 = new StringBuilder();
+            sb2.Append("<ol>");
+            for (IDictionaryEnumerator e = hWords.GetEnumerator(); e.MoveNext(); )
+            {
+                var wnc = new WordAndCnt(e.Key.ToString(), Convert.ToInt32(e.Value.ToString()));
+                list.Add(wnc);
+                sbAppendLI(ref sb2, e.Key + " " + e.Value);
+            }
+            sb2.Append("</ol>");
+
+            list.Sort(delegate(WordAndCnt p1, WordAndCnt p2) { return p1.Count.CompareTo(p2.Count); });
+            list.Reverse();
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("<table border='1' cellspacing='0' cellpadding='4'>");
+            sb.Append("<tr><td><b>#</b></td><td><b>Word</b></td><td><b>Occured</b></td></tr>");
+            int iCnt = 0;
+            foreach (WordAndCnt w in list)
+            {
+                if (w.Count > 1)
+                {
+                    sb.Append("<tr><td><b>" + (++iCnt).ToString() + "</b></td><td><b>" + w.Word + "</b></td><td><b>" + w.Count + "</b></td></tr>");
+                    //sbAppendLI(ref sb, "<b>" + w.Word + "</b> occured " + w.Count + " times");
+                    if (iCnt >= 10)
+                        break;
+                }
+            }
+            sb.Append("</table>");
+
+            return sb.ToString(); // +sb2.ToString();
+        }
+
+        private void sbAppendLI(ref StringBuilder sb, string str)
+        {
+            sb.Append("<li>" + str + "</li>");
+        }
+
+        public class WordAndCnt
+        {
+            public string Word;
+            public int Count;
+
+            public WordAndCnt(string w, int c)
+            {
+                this.Word = w;
+                this.Count = c;
+            }
+        }
+
         #endregion  // Text
     }
 }

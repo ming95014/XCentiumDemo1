@@ -40,7 +40,6 @@
                 jQuery('#mycarousel').jcarousel({
                     size: mycarousel_itemList.length,
                     scroll: 1,
-                    wrap: "circular",
                     itemFallbackDimension: mycarousel_itemList.length,
                     itemLoadCallback: { onBeforeAnimation: mycarousel_itemLoadCallback }
                 });
