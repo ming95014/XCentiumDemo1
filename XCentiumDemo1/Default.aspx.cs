@@ -22,7 +22,7 @@ namespace XCentiumDemo1
             string strHTML = GetHTMLSourceFromURL(tbURL.Text);
 
             // 2. Load Images Into Carousel
-            strPhotos = LoadImagesIntoCarousel(strHTML);
+            strPhotos = GetImagesForCarouselFrom(strHTML);
 
             // 3. count the words
             litTextInfo.Text = GetTextInfo(strHTML);
@@ -46,12 +46,12 @@ namespace XCentiumDemo1
         }
 
         #region Images
-        private string LoadImagesIntoCarousel(string strHTML)
+        private string GetImagesForCarouselFrom(string strHTML)
         {
             // 1. Get the images links from HTML source
             List<Uri> links = FetchLinksFromSource(strHTML);
 
-            // 2. Load the strPhotos--the image source for the Carousel
+            // 2. construct the image list for strPhotos--the image source for the Carousel
             int cnt = 0;
             StringBuilder sb = new StringBuilder();
             foreach (Uri link in links)
@@ -70,9 +70,8 @@ namespace XCentiumDemo1
         {
             List<Uri> links = new List<Uri>();
             try
-            {
-                
-                string regexImgSrc = @"<img[^>]*?src\s*=\s*[""']?([^'"" >]+?)[ '""][^>]*?>";
+            {              
+                string regexImgSrc = @"<img[^>]*?src\s*=\s*[""']?([^'"" >]+?)[ '""][^>]*?>";  // is this too strict and missing some images?
                 MatchCollection matchesImgSrc = Regex.Matches(htmlSource, regexImgSrc, RegexOptions.IgnoreCase | RegexOptions.Singleline);
                 foreach (Match m in matchesImgSrc)
                 {
@@ -86,6 +85,7 @@ namespace XCentiumDemo1
             }
             return links;
         }
+
         #endregion // Images
 
         #region Text
@@ -116,12 +116,10 @@ namespace XCentiumDemo1
                     // 5. Store into hashtable if not already in, if already in, increment it.
                     if (!hWords.Contains(word))
                         hWords.Add(word, 1);
-                    else// otherwise, we increment the count
+                    else  // otherwise, we increment the count
                         hWords[word] = (int)hWords[word] + 1;
                 }
             }
-
-            //return GetPersonByAge();
 
             return "Found " + iWordCnt.ToString() + " words.<br/>" +
                    "The top 10 most frequent words are :" + GetTop10Words(hWords); // + 
@@ -132,9 +130,7 @@ namespace XCentiumDemo1
         // This is done by inserting the Hash table into SortedList, and then reverse it to get the top 10
         private string GetTop10Words(Hashtable hWords)
         {
-
             List<WordAndCnt> list = new List<WordAndCnt>();
-            List<WordAndCnt> listSorted = new List<WordAndCnt>();
             StringBuilder sb2 = new StringBuilder();
             sb2.Append("<ol>");
             for (IDictionaryEnumerator e = hWords.GetEnumerator(); e.MoveNext(); )
