@@ -37,7 +37,7 @@
 
     <h2>Release notes</h2>
     <ul>
-        <li>Some sites such as flickr.com has funny image links</li>
+        <li>By default only show JPEG since there're many small filler png/gif.</li>
     </ul>
 
     <h2>Release History</h2>

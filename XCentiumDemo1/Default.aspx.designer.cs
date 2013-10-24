@@ -22,6 +22,15 @@ namespace XCentiumDemo1 {
         protected global::System.Web.UI.WebControls.TextBox tbURL;
         
         /// <summary>
+        /// chkJPGOnly control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkJPGOnly;
+        
+        /// <summary>
         /// btnSubmit control.
         /// </summary>
         /// <remarks>
@@ -47,6 +56,15 @@ namespace XCentiumDemo1 {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litPhotoInfo;
+        
+        /// <summary>
+        /// lkButton control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink lkButton;
         
         /// <summary>
         /// litTextInfo control.

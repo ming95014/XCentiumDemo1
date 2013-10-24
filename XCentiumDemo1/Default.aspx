@@ -52,7 +52,8 @@
             <p>Enter a valid URL, and I will show you all the images from that URL in a Carousel, and also show you some info about the page.</p>
             <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
   
-            Enter your URL here : <asp:TextBox ID="tbURL" Width="500px" runat="server" Text="http://www.flickr.com/explore" />    
+            Enter your URL here : <asp:TextBox ID="tbURL" Width="500px" runat="server" Text="http://www.flickr.com/explore" /><br />
+            <asp:CheckBox ID="chkJPGOnly" runat="server" Text="JPEG images only" Checked="true" /><img src="/images/question_mark.jpg" width="15px" title="Why?  Since many gif/png are too small to see." /> 
             <asp:Button ID="btnSubmit" Text="Submit" runat="server" OnClick="OnClick_Submit" ValidationGroup="vg1" />
             <asp:RequiredFieldValidator runat="server" ControlToValidate="tbURL" ValidationGroup="vg1" CssClass="field-validation-error" 
                                             ErrorMessage="Please enter a URL" Display="Dynamic" />
@@ -66,6 +67,7 @@
                 <ul id="mycarousel" class="jcarousel-skin-ie7">
                     <!-- The content will be dynamically loaded in here -->
                 </ul>
+                <asp:HyperLink ID="lkButton" runat="server" Target="_blank" Text="Open this page in a new browser window" />
                 <br />
                 <h3>Some interesting stats about the words in this page</h3>
                 <asp:Literal ID="litTextInfo" runat="server" />           

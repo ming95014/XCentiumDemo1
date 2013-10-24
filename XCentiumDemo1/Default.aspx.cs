@@ -27,6 +27,7 @@ namespace XCentiumDemo1
             // 3. count the words
             litTextInfo.Text = GetTextInfo(strHTML);
             pnlResults.Visible = true;
+            lkButton.NavigateUrl = tbURL.Text;
         }
 
         private string GetHTMLSourceFromURL(string strURL)
@@ -55,13 +56,13 @@ namespace XCentiumDemo1
             StringBuilder sb = new StringBuilder();
             foreach (Uri link in links)
             {
-                //if (link.AbsoluteUri.ToLower().Contains(".jpg"))
-                {
-                    sb.Append(@"{ url: '" + link.AbsoluteUri + "', title: 'img' },");
-                    cnt++;
-                }
+                if (chkJPGOnly.Checked && !link.AbsoluteUri.ToLower().Contains(".jpg"))
+                    continue;
+
+                sb.Append(@"{ url: '" + link.AbsoluteUri + "', title: 'img' },");
+                cnt++;
             }
-            litPhotoInfo.Text = cnt.ToString() + " JPEG images found.";
+            litPhotoInfo.Text = cnt.ToString() + (chkJPGOnly.Checked ? " JPEG images found." : " images found.");
             return sb.ToString();          
         }
 
