@@ -33,7 +33,7 @@
             * Item html creation helper.
             */
             function mycarousel_getItemHTML(item) {
-                return '<img src="' + item.url + '" width="75" height="75" alt="' + item.url + '" />';
+                return '<img src="' + item.url + '" width="75" height="75" title="' + item.title + '" alt="' + item.url + '" />';
             };
 
             jQuery(document).ready(function () {

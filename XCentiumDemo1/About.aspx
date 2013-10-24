@@ -42,15 +42,17 @@
 
     <h2>Release notes</h2>
     <ul>
-        <li>By default only show JPEG since there're many small filler png/gif.</li>
-        <li>When JPEG-only is not checked, there're many tiny png/gif.</li>
+        <li>By default only showing JPEG since there're many small filler png/gif.</li>
+        <li>When JPEG-only is not checked, there're many tiny png/gif that may not show well on carousel.</li>
         <li>HTML tags are not part of 'words' counted.</li>
-        <li>When BODY-only is not checked, much more 'words' could be found.</li>
+        <li>Words length < 4 or > 14 are skipped to avoid common words such as I, and, the...etc.</li>
+        <li>When BODY-only is not checked, many more 'words' could be found.</li>
         <li>images and text from iframe or Sprints are not pulled.</li>
     </ul>
 
     <h2>Release History</h2>
     <ul>
         <li>V0.1  Ming  10/23/2013</li>
+        <li>V0.2  Ming  10/24/2013</li>
     </ul>
 </asp:Content>

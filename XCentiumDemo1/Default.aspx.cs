@@ -58,9 +58,8 @@ namespace XCentiumDemo1
             {
                 if (chkJPGOnly.Checked && !link.AbsoluteUri.ToLower().Contains(".jpg"))
                     continue;
-
-                sb.Append(@"{ url: '" + link.AbsoluteUri + "', title: 'img' },");
-                cnt++;
+                else if (!link.AbsoluteUri.StartsWith("file"))
+                    sb.Append(@"{ url: '" + link.AbsoluteUri + "', title: '"+ (++cnt).ToString() + "' },");                
             }
             litPhotoInfo.Text = cnt.ToString() + (chkJPGOnly.Checked ? " JPEG images found." : " images found.");
             return sb.ToString();          
@@ -71,7 +70,11 @@ namespace XCentiumDemo1
             List<Uri> links = new List<Uri>();
             try
             {
-                string regexImgSrc = @"<img.+?src=""(.+?)"".+?/?>";
+                string regexImgSrc = @"<img.+?src=""(.+?)"".+?/?>";   // ORIG, 3, 33
+                  //string regexImgSrc = @"(?<=<img.*?src="")[^""]*";  // 0
+                //string regexImgSrc = "<img[\\w\\W]*?src=""([^""]+?)""[\\w\\W]*?>"; 
+                  //string regexImgSrc = "(?<=<img[^<]+?src=\")[^\"]+";  // 0
+ 
                 MatchCollection matchesImgSrc = Regex.Matches(htmlSource, regexImgSrc, RegexOptions.IgnoreCase | RegexOptions.Singleline);
                 foreach (Match m in matchesImgSrc)
                 {
@@ -146,6 +149,7 @@ namespace XCentiumDemo1
 
             return (iEndBody == -1) ? strHTML.Substring(iStartBody) : strHTML.Substring(iStartBody, iEndBody - iStartBody + 7);
         }
+
         // This is done by inserting the Hash table into SortedList, and then reverse it to get the top 10
         private string GetTop10Words(Hashtable hWords)
         {
