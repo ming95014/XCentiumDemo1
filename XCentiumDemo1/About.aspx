@@ -48,6 +48,7 @@
         <li>Words length < 4 or > 14 are skipped to avoid common words such as I, and, the...etc.</li>
         <li>When BODY-only is not checked, many more 'words' could be found.</li>
         <li>images and text from iframe or Sprints are not pulled.</li>
+        <li>Tests against IE10, FF24, and Chrome30 </li>
     </ul>
 
     <h2>Release History</h2>
