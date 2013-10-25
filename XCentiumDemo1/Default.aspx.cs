@@ -26,6 +26,7 @@ namespace XCentiumDemo1
 
             // 3. count the words
             litTextInfo.Text = GetTextInfo(strHTML);
+
             pnlResults.Visible = true;
             lkButton.NavigateUrl = tbURL.Text;
         }
@@ -46,6 +47,7 @@ namespace XCentiumDemo1
         }
 
         #region Images
+
         private string GetImagesForCarouselFrom(string strHTML)
         {
             // 1. Get the images links from HTML source
@@ -65,16 +67,13 @@ namespace XCentiumDemo1
             return sb.ToString();          
         }
 
+        // Get all the <img src=' '> from htmlSource
         private List<Uri> FetchLinksFromSource(string htmlSource)
         {
             List<Uri> links = new List<Uri>();
             try
             {
                 string regexImgSrc = @"<img.+?src=""(.+?)"".+?/?>";   // ORIG, 3, 33
-                  //string regexImgSrc = @"(?<=<img.*?src="")[^""]*";  // 0
-                //string regexImgSrc = "<img[\\w\\W]*?src=""([^""]+?)""[\\w\\W]*?>"; 
-                  //string regexImgSrc = "(?<=<img[^<]+?src=\")[^\"]+";  // 0
- 
                 MatchCollection matchesImgSrc = Regex.Matches(htmlSource, regexImgSrc, RegexOptions.IgnoreCase | RegexOptions.Singleline);
                 foreach (Match m in matchesImgSrc)
                 {
@@ -111,14 +110,14 @@ namespace XCentiumDemo1
             int iWordCnt = 0;
             Hashtable hWords = new Hashtable();
             string[] arr = strHTML.Split(' ');
-            StringBuilder sb = new StringBuilder();
+            //StringBuilder sb = new StringBuilder();
             foreach (string w in arr)
             {
                 var word = w.Trim();
                 // 5. Also get rid of really short and really long words--just taking the liberty that we don't want them...Ming
                 if (word.Length > 3 && word.Length < 14 && !word.Contains("-") && !word.ToCharArray().Any(char.IsNumber))
                 {
-                    sbAppendLI(ref sb, word);
+                    //sbAppendLI(ref sb, word);
                     iWordCnt++;
                     // 6. Store into hashtable if not already in, if already in, increment it.
                     if (!hWords.Contains(word))
@@ -134,6 +133,7 @@ namespace XCentiumDemo1
                    //"<ol>" + sb.ToString() + "</ol>";
         }
 
+        // Get to just the text between <body> and </body>
         private string GetBodyofHTML(string strHTML)
         {
             int iStartBody = 0;
@@ -150,19 +150,18 @@ namespace XCentiumDemo1
             return (iEndBody == -1) ? strHTML.Substring(iStartBody) : strHTML.Substring(iStartBody, iEndBody - iStartBody + 7);
         }
 
-        // This is done by inserting the Hash table into SortedList, and then reverse it to get the top 10
+        // This is done by inserting the Hash table into List, Sort it by Count, and then reverse it to get the top 10
         private string GetTop10Words(Hashtable hWords)
         {
             List<WordAndCnt> list = new List<WordAndCnt>();
-            StringBuilder sb2 = new StringBuilder();
-            sb2.Append("<ol>");
+            //StringBuilder sb2 = new StringBuilder();
+            //sb2.Append("<ol>");
             for (IDictionaryEnumerator e = hWords.GetEnumerator(); e.MoveNext(); )
             {
-                var wnc = new WordAndCnt(e.Key.ToString(), Convert.ToInt32(e.Value.ToString()));
-                list.Add(wnc);
-                sbAppendLI(ref sb2, e.Key + " " + e.Value);
+                list.Add(new WordAndCnt(e.Key.ToString(), Convert.ToInt32(e.Value.ToString())));
+                //sbAppendLI(ref sb2, e.Key + " " + e.Value);
             }
-            sb2.Append("</ol>");
+            //sb2.Append("</ol>");
 
             list.Sort(delegate(WordAndCnt p1, WordAndCnt p2) { return p1.Count.CompareTo(p2.Count); });
             list.Reverse();
@@ -175,8 +174,7 @@ namespace XCentiumDemo1
             {
                 if (w.Count > 1)
                 {
-                    sb.Append("<tr><td><b>" + (++iCnt).ToString() + "</b></td><td><b>" + w.Word + "</b></td>" +
-                                  "<td><b>" + w.Count + "</b></td></tr>");
+                    sb.Append("<tr><td><b>" + (++iCnt).ToString() + "</b></td><td><b>" + w.Word + "</b></td>" + "<td><b>" + w.Count + "</b></td></tr>");
                     //sbAppendLI(ref sb, "<b>" + w.Word + "</b> occured " + w.Count + " times");
                     if (iCnt >= 10)
                         break;
