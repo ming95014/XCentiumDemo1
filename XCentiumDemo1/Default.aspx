@@ -54,7 +54,7 @@
   
             Enter your URL here : <asp:TextBox ID="tbURL" Width="700px" runat="server" Text="http://www.flickr.com/explore" /><br />
             <asp:CheckBox ID="chkJPGOnly" runat="server" Text="JPEG images only" Checked="true" /><img src="/images/question_mark.jpg" width="15px" title="Why?  Since many gif/png are too small to see." /> 
-            <asp:CheckBox ID="chkBodyOnly" runat="server" Text="Only Search for Words within BODY of html" Checked="true" /><img src="/images/question_mark.jpg" width="15px" title="Only look for words within <body> </body> tags" /> 
+            <asp:CheckBox ID="chkBodyOnly" runat="server" Text="Only Search for Words within BODY of html" Checked="true" /><img src="/images/question_mark.jpg" width="15px" title="Only look for words within body tags" /> 
             <asp:Button ID="btnSubmit" Text="Submit" runat="server" OnClick="OnClick_Submit" ValidationGroup="vg1" />
             <asp:RequiredFieldValidator runat="server" ControlToValidate="tbURL" ValidationGroup="vg1" CssClass="field-validation-error" 
                                             ErrorMessage="Please enter a URL" Display="Dynamic" />

@@ -78,7 +78,16 @@ namespace XCentiumDemo1
                 foreach (Match m in matchesImgSrc)
                 {
                     string href = m.Groups[1].Value;
-                    links.Add(new Uri(href));
+                    if (href.StartsWith(@"/") || href.StartsWith(@"~"))
+                        href = tbURL.Text + "/" + href;
+                    try
+                    {
+                        links.Add(new Uri(href));
+                    }
+                    catch (Exception ex)
+                    {
+                        // ignore bad image urls for now
+                    }
                 }
             }
             catch (Exception ex)
