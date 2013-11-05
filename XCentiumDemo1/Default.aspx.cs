@@ -54,6 +54,7 @@ namespace XCentiumDemo1
             List<Uri> links = FetchLinksFromSource(strHTML);
 
             // 2. construct the image list for strPhotos--the image source for the Carousel
+            Hashtable htImages = new Hashtable();
             int cnt = 0;
             StringBuilder sb = new StringBuilder();
             foreach (Uri link in links)
@@ -61,9 +62,16 @@ namespace XCentiumDemo1
                 if (chkJPGOnly.Checked && !link.AbsoluteUri.ToLower().Contains(".jpg"))
                     continue;
                 else if (!link.AbsoluteUri.StartsWith("file"))
-                    sb.Append(@"{ url: '" + link.AbsoluteUri + "', title: '"+ (++cnt).ToString() + "' },");                
+                {
+                    if (!htImages.Contains(link.AbsoluteUri))
+                    {
+                        htImages.Add(link.AbsoluteUri, 1);
+                        var strFile = link.AbsoluteUri.Substring(link.AbsoluteUri.LastIndexOf('/') + 1);
+                        sb.Append(@"{ url: '" + link.AbsoluteUri + "', title: '"+ (++cnt).ToString() + ". " + strFile + "' },");
+                    }
+                }                 
             }
-            litPhotoInfo.Text = cnt.ToString() + (chkJPGOnly.Checked ? " JPEG images found." : " images found.");
+            litPhotoInfo.Text = cnt.ToString() + (chkJPGOnly.Checked ? " unique JPEG images found." : " unique images found.");
             return sb.ToString();          
         }
 
