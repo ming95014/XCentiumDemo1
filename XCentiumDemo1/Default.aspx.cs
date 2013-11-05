@@ -50,11 +50,13 @@ namespace XCentiumDemo1
 
         private string GetImagesForCarouselFrom(string strHTML)
         {
-            // 1. Get the images links from HTML source
-            List<Uri> links = FetchLinksFromSource(strHTML);
+            // 1. Get the images links from HTML source using a couple of regex patterns
+            List<Uri> links = new List<Uri>();
+            Hashtable htImages = new Hashtable();
+            FetchLinksFromSource(ref links, ref htImages, strHTML, @"<img.+?src=""(.+?)"".+?/?>");  // from <img src
+            FetchLinksFromSource(ref links, ref htImages,strHTML, @"(http\S*.jpg)");               // from if loaded in javascripts
 
             // 2. construct the image list for strPhotos--the image source for the Carousel
-            Hashtable htImages = new Hashtable();
             int cnt = 0;
             StringBuilder sb = new StringBuilder();
             foreach (Uri link in links)
@@ -63,34 +65,34 @@ namespace XCentiumDemo1
                     continue;
                 else if (!link.AbsoluteUri.StartsWith("file"))
                 {
-                    if (!htImages.Contains(link.AbsoluteUri))
-                    {
-                        htImages.Add(link.AbsoluteUri, 1);
-                        var strFile = link.AbsoluteUri.Substring(link.AbsoluteUri.LastIndexOf('/') + 1);
-                        sb.Append(@"{ url: '" + link.AbsoluteUri + "', title: '"+ (++cnt).ToString() + ". " + strFile + "' },");
-                    }
+                    var strFile = link.AbsoluteUri.Substring(link.AbsoluteUri.LastIndexOf('/') + 1);
+                    sb.Append(@"{ url: '" + link.AbsoluteUri + "', title: '"+ (++cnt).ToString() + ". " + strFile + "' },");
                 }                 
             }
             litPhotoInfo.Text = cnt.ToString() + (chkJPGOnly.Checked ? " unique JPEG images found." : " unique images found.");
             return sb.ToString();          
         }
 
-        // Get all the <img src=' '> from htmlSource
-        private List<Uri> FetchLinksFromSource(string htmlSource)
+        // Get all the <img src> from htmlSource using regexImgSrc
+        private void FetchLinksFromSource(ref List<Uri> links, ref Hashtable htImages, string htmlSource, string regexImgSrc)
         {
-            List<Uri> links = new List<Uri>();
             try
             {
-                string regexImgSrc = @"<img.+?src=""(.+?)"".+?/?>";   // ORIG, 3, 33
                 MatchCollection matchesImgSrc = Regex.Matches(htmlSource, regexImgSrc, RegexOptions.IgnoreCase | RegexOptions.Singleline);
                 foreach (Match m in matchesImgSrc)
                 {
-                    string href = m.Groups[1].Value;
-                    if (href.StartsWith(@"/") || href.StartsWith(@"~"))
+                    string href = m.Groups[1].Value.Trim().Replace(@"\","");
+                    if (href.Length <= 4)
+                        continue;
+                    else if (href.StartsWith(@"/") || href.StartsWith(@"~"))
                         href = tbURL.Text + "/" + href;
                     try
                     {
-                        links.Add(new Uri(href));
+                        if (!htImages.Contains(href)) // only if it has not already in Hashtable
+                        {
+                            htImages.Add(href, 1);
+                            links.Add(new Uri(href));
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -102,7 +104,6 @@ namespace XCentiumDemo1
             {
                 // ignore bad image urls for now
             }
-            return links;
         }
 
         #endregion // Images
